@@ -1,0 +1,18 @@
+<%- include('layout/header') %>
+<main class="page-container" style="padding: 6rem 5%; max-width: 1200px; margin: 0 auto; min-height: 70vh;">
+    <h1 class="section-title">Pengumuman Terbaru</h1>
+    <div class="card-grid">
+        <% if (news && news.length > 0) { %>
+            <% news.forEach(item => { %>
+                <article class="glass-card">
+                    <div style="color: var(--accent); font-weight: 600; font-size: 0.9rem; margin-bottom: 0.5rem;"><%= new Date(item.date).toLocaleDateString() %></div>
+                    <h3><%= item.title %></h3>
+                    <p><%= item.content %></p>
+                </article>
+            <% }) %>
+        <% } else { %>
+            <p style="text-align: center; color: var(--text-muted); grid-column: 1 / -1;">Belum ada berita saat ini.</p>
+        <% } %>
+    </div>
+</main>
+<%- include('layout/footer') %>

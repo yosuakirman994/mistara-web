@@ -1,0 +1,47 @@
+<%- include('layout/header') %>
+<main class="page-container" style="padding: 6rem 5%; max-width: 1200px; margin: 0 auto; min-height: 70vh;">
+    <h1 class="section-title">Hubungi Kami</h1>
+    <div style="display: flex; gap: 4rem; flex-wrap: wrap; justify-content: center;">
+        <div class="glass-card" style="flex: 1; min-width: 300px; max-width: 500px;">
+            <h3>Tetap Terhubung</h3>
+            <p style="margin-bottom: 2rem;">Punya pertanyaan tentang jadwal atau kegiatan kami? Hubungi kami.</p>
+            <form style="display: flex; flex-direction: column; gap: 1rem;" onsubmit="sendToWa(event)">
+                <input type="text" id="contactName" required placeholder="Nama Anda" style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.5); font-family: 'Outfit';">
+                <input type="email" id="contactEmail" required placeholder="Email Anda" style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.5); font-family: 'Outfit';">
+                <textarea id="contactMessage" required placeholder="Pesan" rows="5" style="padding: 1rem; border: 1px solid var(--border); border-radius: 8px; background: rgba(255,255,255,0.5); resize: vertical; font-family: 'Outfit';"></textarea>
+                <button type="submit" class="btn-primary" style="margin-top: 1rem; display: flex; align-items: center; justify-content: center; gap: 8px;">Kirim Pesan ke WhatsApp <i class="fa-brands fa-whatsapp" style="font-size: 1.2rem;"></i></button>
+            </form>
+        </div>
+        <div class="glass-card" style="flex: 1; min-width: 300px; max-width: 500px; display: flex; flex-direction: column; justify-content: center;">
+            <div style="margin-bottom: 2rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-location-dot" style="color: var(--accent); width: 25px;"></i> Lokasi</h4>
+                <p>Jl. Lkr. Utara, RT.03/RW.06, Harapan Baru, Kec. Bekasi Utara, Kota Bks, Jawa Barat 17123</p>
+            </div>
+            <div style="margin-bottom: 2rem;">
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-envelope" style="color: var(--accent); width: 25px;"></i> Email</h4>
+                <p>misdinarstclara@gmail.com</p>
+            </div>
+            <div>
+                <h4 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-brands fa-whatsapp" style="color: var(--accent); width: 25px;"></i> WhatsApp</h4>
+                <p>+62 817-7634-6646</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+function sendToWa(e) {
+    e.preventDefault();
+    const name = document.getElementById('contactName').value;
+    const email = document.getElementById('contactEmail').value;
+    const message = document.getElementById('contactMessage').value;
+    
+    // Format text
+    const text = `Halo Misdinar St Clara,%0A%0ASaya ${name} (${email}).%0A%0A${message}`;
+    
+    // Open WA
+    const waUrl = `https://wa.me/6281776346646?text=${text}`;
+    window.open(waUrl, '_blank');
+}
+</script>
+<%- include('layout/footer') %>

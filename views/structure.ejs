@@ -1,0 +1,304 @@
+<%- include('layout/header') %>
+<main class="page-container" style="padding: 6rem 5%; max-width: 1200px; margin: 0 auto; min-height: 70vh;">
+    <h1 class="section-title">Struktur Organisasi</h1>
+    
+    <style>
+        .org-section {
+            margin-bottom: 4rem;
+            text-align: center;
+        }
+        .org-title {
+            color: var(--primary);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .org-line {
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary);
+            margin: 0 auto 2rem auto;
+        }
+        .org-profile {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1rem 0;
+            padding: 0 1rem;
+            text-align: center;
+            min-width: 240px; /* Keep minimum width but allow expansion */
+        }
+        .org-photo-placeholder {
+            width: 135px;
+            height: 180px; /* Portrait aspect ratio 3:4 */
+            border-radius: 8px; /* Slightly rounded corners, no longer a full circle */
+            background-color: var(--bg-light);
+            border: 2px dashed var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .org-photo-placeholder span {
+            color: var(--text-muted);
+            position: absolute;
+            z-index: 1;
+        }
+        .org-photo-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 2;
+        }
+        .org-name {
+            font-weight: 600;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+            white-space: nowrap;
+        }
+        .org-role {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .org-row {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+
+    <!-- 1. Romo Moderator -->
+    <div class="org-section">
+        <h2 class="org-title">Romo Moderator / Pastor Paroki</h2>
+        <div class="org-line"></div>
+        <div class="org-profile">
+            <div class="org-photo-placeholder">
+                <img src="/images/moderator-kaprilius.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">RP Kaprilius Sitepu, OFMCap.</div>
+        </div>
+    </div>
+
+    <!-- 2. Koordinator Sub-Seksi -->
+    <div class="org-section">
+        <h2 class="org-title">Koordinator Sub-Seksi</h2>
+        <div class="org-line"></div>
+        <div class="org-profile">
+            <div class="org-photo-placeholder">
+                <img src="/images/koordinator-misdinar.jpg" alt="Yosua Kirman Gesta" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Yosua Kirman Gesta Sihombing</div>
+            <div class="org-role">Koordinator Sub-Seksi Misdinar</div>
+        </div>
+    </div>
+
+    <!-- 3. Badan Pengurus Harian -->
+    <div class="org-section">
+        <h2 class="org-title">Badan Pengurus Harian</h2>
+        <div class="org-line"></div>
+        <div class="org-row">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/ketua-dhea.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Stevani Dheaayu</div>
+                <div class="org-role">Ketua Misdinar</div>
+            </div>
+        </div>
+        <div class="org-row" style="margin-top: 2rem;">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/wakil-putra.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Yohanes Babtista Putra Dhaksinarga</div>
+                <div class="org-role">Wakil Ketua Misdinar</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/sekretaris-yismaya.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Yismaya Gidalty</div>
+                <div class="org-role">Sekretaris Misdinar</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/bendahara-cinta.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Anastasia Cinta Yuni S.</div>
+                <div class="org-role">Bendahara Misdinar</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Pendidikan & Latihan -->
+    <div class="org-section">
+        <h2 class="org-title">Pendidikan & Latihan</h2>
+        <div class="org-line"></div>
+        <div class="org-row">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/koordinator-diklat.jpg" alt="Maria Fransisca" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                    <span>(foto)</span>
+                </div>
+                <div class="org-name">Maria Fransisca Anna P.</div>
+                <div class="org-role">Koordinator Diklat</div>
+            </div>
+        </div>
+        <div class="org-row" style="margin-top: 2rem;">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/pab-nabel.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Nabel Pandyaputra</div>
+                <div class="org-role">Anggota PAB</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/pab-radit.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Radit</div>
+                <div class="org-role">Anggota PAB</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/pal-malo.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Malo</div>
+                <div class="org-role">Anggota PAL</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/pal-kimberly.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Kimberly</div>
+                <div class="org-role">Anggota PAL</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Jadwal -->
+    <div class="org-section">
+        <h2 class="org-title">Jadwal</h2>
+        <div class="org-line"></div>
+        <div class="org-row">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/koordinator-jadwal.jpg" alt="Vinny" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                    <span>(foto)</span>
+                </div>
+                <div class="org-name">Josephine Gracia Vinny</div>
+                <div class="org-role">Koordinator Jadwal</div>
+            </div>
+        </div>
+        <div class="org-row" style="margin-top: 2rem;">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/jadwal-yesha.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Yesha</div>
+                <div class="org-role">Anggota Jadwal</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/jadwal-seera.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Seera</div>
+                <div class="org-role">Anggota Jadwal</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/jadwal-rossa.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Rossa Angela Halan</div>
+                <div class="org-role">Anggota Jadwal</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Humas -->
+    <div class="org-section">
+        <h2 class="org-title">Humas</h2>
+        <div class="org-line"></div>
+        <div class="org-row">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/humas-evan.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Evan Anindyaputra</div>
+                <div class="org-role">Koordinator Humas</div>
+            </div>
+        </div>
+        <div class="org-row" style="margin-top: 2rem;">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/humas-gracia.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Gracia Luna Aprilia</div>
+                <div class="org-role">Anggota Humas</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/humas-ketrin.jpg" alt="Katherina" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                    <span>(foto)</span>
+                </div>
+                <div class="org-name">Katherina Valencia Becker</div>
+                <div class="org-role">Anggota Humas</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/humas-anggun.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Anggun</div>
+                <div class="org-role">Anggota Humas</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 7. Inventaris -->
+    <div class="org-section">
+        <h2 class="org-title">Inventaris</h2>
+        <div class="org-line"></div>
+        <div class="org-row">
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/inventaris-chris.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Chris</div>
+                <div class="org-role">Koordinator Inventaris</div>
+            </div>
+            <div class="org-profile">
+                <div class="org-photo-placeholder">
+                    <img src="/images/inventaris-josua.jpg" alt="" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.style.opacity=0" />
+                <span>(foto)</span>
+            </div>
+            <div class="org-name">Josua</div>
+                <div class="org-role">Anggota Inventaris</div>
+            </div>
+        </div>
+    </div>
+
+</main>
+<%- include('layout/footer') %>

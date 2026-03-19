@@ -1,0 +1,43 @@
+<%- include('layout/header') %>
+
+<main>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1><span>Misdinar St Clara</span></h1>
+            <p>Menjadikan Misdinar Yang Bekarakter dan Bermutu dalam Mengimani Yesus Kristus</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <a href="/schedule" class="btn-primary">Lihat Jadwal</a>
+                <a href="https://absensi.misdinarstclara.my.id/login.php" class="btn-primary btn-outline" style="background: transparent; color: var(--primary); border-color: var(--primary);" target="_blank">Isi Absensi</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Schedule Snippet -->
+    <section class="section-padding">
+        <h2 class="section-title">Kegiatan Mendatang</h2>
+        <div class="schedule-list">
+            <% if (schedule && schedule.length > 0) { %>
+                <% schedule.slice(0, 2).forEach(item => { %>
+                    <div class="schedule-item">
+                        <div class="schedule-date">
+                            <div class="day"><%= new Date(item.date).getDate() %></div>
+                            <div class="month"><%= new Date(item.date).toLocaleString('default', { month: 'short', year: 'numeric' }) %></div>
+                        </div>
+                        <div class="schedule-details">
+                            <h4><%= item.title %></h4>
+                            <p><i class="fa-regular fa-clock"></i> <%= item.time %></p>
+                        </div>
+                    </div>
+                <% }) %>
+                <div style="text-align: center; margin-top: 2rem;">
+                    <a href="/schedule" class="nav-links">Lihat Semua Jadwal <i class="fa-solid fa-arrow-right"></i></a>
+                </div>
+            <% } else { %>
+                <p style="text-align: center; color: var(--text-muted);">Tidak ada kegiatan mendatang yang ditemukan.</p>
+            <% } %>
+        </div>
+    </section>
+</main>
+
+<%- include('layout/footer') %>
