@@ -15,7 +15,9 @@
             <ul style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <li><a href="/dashboard" style="display: block; padding: 0.8rem 1rem; background-color: rgba(139, 90, 43, 0.1); color: var(--accent); border-radius: 8px; font-weight: 600;"><i class="fa-solid fa-house" style="width: 20px;"></i> Beranda</a></li>
                 <li><a href="/schedule" style="display: block; padding: 0.8rem 1rem; color: var(--text-muted); border-radius: 8px;"><i class="fa-solid fa-calendar" style="width: 20px;"></i> Kelola Jadwal</a></li>
-                <li><a href="#" onclick="alert('Fitur Kelola Anggota akan ditambahkan pada tahap selanjutnya!'); return false;" style="display: block; padding: 0.8rem 1rem; color: var(--text-muted); border-radius: 8px;"><i class="fa-solid fa-users" style="width: 20px;"></i> Kelola Anggota</a></li>
+                <% if(user.role === 'Admin') { %>
+                <li><a href="/users" style="display: block; padding: 0.8rem 1rem; color: var(--text-muted); border-radius: 8px;"><i class="fa-solid fa-users" style="width: 20px;"></i> Kelola Anggota</a></li>
+                <% } %>
                 <li style="margin-top: 1rem;"><a href="/logout" style="display: block; padding: 0.8rem 1rem; color: #DC2626; border-radius: 8px;"><i class="fa-solid fa-arrow-right-from-bracket" style="width: 20px;"></i> Keluar</a></li>
             </ul>
         </aside>

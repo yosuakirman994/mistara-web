@@ -140,4 +140,58 @@ router.get('/dashboard', requireAuth, async (req, res) => {
      }
 });
 
+// User Management Routes
+const requireAdmin = (req, res, next) => {
+     if (req.session && req.session.user && req.session.user.role === 'Admin') {
+          return next();
+     }
+     res.redirect('/dashboard');
+};
+
+router.get('/users', requireAdmin, async (req, res) => {
+    try {
+        const db = await getDb();
+        const [users] = await db.query("SELECT id, name, email, role, created_at FROM users ORDER BY role ASC, name ASC");
+        res.render('users', { title: 'Kelola Anggota', user: req.session.user, userList: users, error: null });
+    } catch(err) {
+        console.error(err);
+        res.redirect('/dashboard');
+    }
+});
+
+router.post('/users/add', requireAdmin, async (req, res) => {
+    try {
+        const db = await getDb();
+        const { name, email, password, role } = req.body;
+        
+        // Cek apakah email sudah ada
+        const [existing] = await db.query("SELECT id FROM users WHERE email = ?", [email]);
+        if (existing.length > 0) {
+            const [users] = await db.query("SELECT id, name, email, role, created_at FROM users ORDER BY role ASC, name ASC");
+            return res.render('users', { title: 'Kelola Anggota', user: req.session.user, userList: users, error: 'Gagal ditambahkan! Email tersebut sudah terpakai oleh orang lain.' });
+        }
+        
+        await db.query("INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)", [name, email, password, role]);
+        res.redirect('/users');
+    } catch(err) {
+        console.error(err);
+        res.redirect('/users');
+    }
+});
+
+router.post('/users/delete/:id', requireAdmin, async (req, res) => {
+    try {
+        const db = await getDb();
+        // Pencegahan agar admin tidak bisa sengaja/tak sengaja menghapus dirinya sendiri
+        if (parseInt(req.params.id) === req.session.user.id) {
+            return res.redirect('/users');
+        }
+        await db.query("DELETE FROM users WHERE id = ?", [req.params.id]);
+        res.redirect('/users');
+    } catch(err) {
+        console.error(err);
+        res.redirect('/users');
+    }
+});
+
 module.exports = router;
