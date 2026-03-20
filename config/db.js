@@ -1,54 +1,60 @@
-const sqlite3 = require('sqlite3').verbose();
-const { open } = require('sqlite');
-const path = require('path');
+const mysql = require('mysql2/promise');
 
-let dbInstance = null;
+let pool = null;
 
 async function getDb() {
-    if (dbInstance) return dbInstance;
+    if (pool) return pool;
     
     try {
-        dbInstance = await open({
-            filename: path.join(__dirname, '../mistara.sqlite'),
-            driver: sqlite3.Database
+        // Create a connection pool using environment variables
+        pool = mysql.createPool({
+            host: process.env.DB_HOST || 'localhost',
+            user: process.env.DB_USER || 'root',
+            password: process.env.DB_PASS || '',
+            database: process.env.DB_NAME || 'misdinar_st_clara',
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
         });
 
-        // Auto-setup database tables
-        await dbInstance.exec(`
+        // Auto-setup database tables for MySQL
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS users (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                email TEXT NOT NULL UNIQUE,
-                password TEXT NOT NULL,
-                name TEXT NOT NULL,
-                role TEXT DEFAULT 'Pengurus',
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
-            
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                password VARCHAR(255) NOT NULL,
+                name VARCHAR(255) NOT NULL,
+                role VARCHAR(100) DEFAULT 'Pengurus',
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+        
+        await pool.query(`
             CREATE TABLE IF NOT EXISTS schedules (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                title TEXT NOT NULL,
-                date TEXT NOT NULL,
-                time TEXT NOT NULL,
-                color TEXT DEFAULT '#8B5A2B',
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                title VARCHAR(255) NOT NULL,
+                date DATE NOT NULL,
+                time TIME NOT NULL,
+                color VARCHAR(50) DEFAULT '#8B5A2B',
                 description TEXT,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-            );
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
         `);
 
         // Seed default Admin if not exists
         const adminEmail = 'admin@mistara.id';
-        const row = await dbInstance.get('SELECT * FROM users WHERE email = ?', [adminEmail]);
-        if (!row) {
-            await dbInstance.run(
+        const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [adminEmail]);
+        if (rows.length === 0) {
+            await pool.query(
                 'INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)',
                 [adminEmail, 'MistaraAdmin2026', 'Ketua Misdinar', 'Admin']
             );
-            console.log('Seeded default admin user for SQLite.');
+            console.log('Seeded default admin user for MySQL.');
         }
 
-        return dbInstance;
+        return pool;
     } catch (err) {
-        console.error("SQLite initialization error:", err);
+        console.error("MySQL initialization error:", err);
         throw err;
     }
 }

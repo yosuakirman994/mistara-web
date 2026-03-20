@@ -1,0 +1,36 @@
+name: Deploy Node.js app to cPanel via FTP
+
+on:
+  push:
+    branches:
+      - main  # Bot berjalan setiap ada `git push origin main`
+
+jobs:
+  web-deploy:
+    name: 🎉 Auto Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+      
+      - name: 📝 Trigger cPanel Passenger Restart
+        run: |
+          mkdir -p tmp
+          touch tmp/restart.txt
+      
+      - name: 📂 Sync files to cPanel (FTP Deploy)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          # Path ini disamakan dengan akun FTP yang Anda buat di cPanel
+          server-dir: ./ 
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+            .env
+            mistara.sqlite

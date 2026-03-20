@@ -15,7 +15,7 @@ const requireAuth = (req, res, next) => {
 router.get('/', async (req, res) => {
      try {
           const db = await getDb();
-          const rows = await db.all("SELECT * FROM schedules WHERE date >= date('now', 'localtime') ORDER BY date ASC, time ASC LIMIT 3");
+          const [rows] = await db.query("SELECT * FROM schedules WHERE date >= CURDATE() ORDER BY date ASC, time ASC LIMIT 3");
           res.render('home', { title: 'Beranda', schedule: rows });
      } catch (err) {
           console.log("Database offline or error, falling back to empty schedule.", err);
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 router.get('/schedule', async (req, res) => {
      try {
           const db = await getDb();
-          const rows = await db.all('SELECT * FROM schedules ORDER BY date ASC, time ASC');
+          const [rows] = await db.query('SELECT * FROM schedules ORDER BY date ASC, time ASC');
           // Map binary formats or format dates if needed, but the current EJS handles JS Dates fine.
           res.render('schedule', { title: 'Jadwal Kegiatan', schedule: rows });
      } catch (err) {
@@ -41,7 +41,7 @@ router.post('/schedule/add', requireAuth, async (req, res) => {
      try {
           const db = await getDb();
           const { title, date, time, color } = req.body;
-          await db.run(
+          await db.query(
                "INSERT INTO schedules (title, date, time, color) VALUES (?, ?, ?, ?)",
                [title, date, time, color || '#8B5A2B']
           );
@@ -57,7 +57,7 @@ router.post('/schedule/edit/:id', requireAuth, async (req, res) => {
      try {
           const db = await getDb();
           const { title, date, time, color } = req.body;
-          await db.run(
+          await db.query(
                "UPDATE schedules SET title = ?, date = ?, time = ?, color = ? WHERE id = ?",
                [title, date, time, color || '#8B5A2B', req.params.id]
           );
@@ -72,7 +72,7 @@ router.post('/schedule/edit/:id', requireAuth, async (req, res) => {
 router.post('/schedule/delete/:id', requireAuth, async (req, res) => {
      try {
           const db = await getDb();
-          await db.run("DELETE FROM schedules WHERE id = ?", [req.params.id]);
+          await db.query("DELETE FROM schedules WHERE id = ?", [req.params.id]);
           res.redirect('/schedule');
      } catch(err) {
           console.error("Database error on /schedule/delete:", err);
@@ -110,7 +110,7 @@ router.post('/login', async (req, res) => {
      try {
           const db = await getDb();
           const { email, password } = req.body;
-          const users = await db.all('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
+          const [users] = await db.query('SELECT * FROM users WHERE email = ? AND password = ?', [email, password]);
           
           if (users.length > 0) {
                const user = users[0];
@@ -133,8 +133,8 @@ router.get('/logout', (req, res) => {
 router.get('/dashboard', requireAuth, async (req, res) => {
      try {
           const db = await getDb();
-          const row = await db.get("SELECT COUNT(*) as count FROM schedules WHERE date >= date('now', 'localtime')");
-          res.render('dashboard', { title: 'Dashboard', user: req.session.user, scheduleCount: row.count });
+          const [rows] = await db.query("SELECT COUNT(*) as count FROM schedules WHERE date >= CURDATE()");
+          res.render('dashboard', { title: 'Dashboard', user: req.session.user, scheduleCount: rows[0].count });
      } catch(err) {
           res.render('dashboard', { title: 'Dashboard', user: req.session.user, scheduleCount: 0 });
      }
