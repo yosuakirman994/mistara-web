@@ -58,7 +58,8 @@
             color: var(--text-dark);
             font-size: 1.1rem;
             margin-bottom: 0.3rem;
-            white-space: nowrap;
+            /* text-wrap balance ensures long names look good on 2 lines */
+            text-wrap: balance; 
         }
         .org-role {
             color: var(--text-muted);
