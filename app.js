@@ -4,6 +4,7 @@ const path = require('path');
 const cors = require('cors');
 const session = require('express-session');
 const indexRoutes = require('./routes/index');
+const rosterRoutes = require('./routes/roster');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -34,6 +35,7 @@ app.set('view engine', 'ejs');
 
 // Routes
 app.use('/', indexRoutes);
+app.use('/roster', rosterRoutes);
 
 // Error Handling
 app.use((req, res, next) => {

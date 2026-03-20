@@ -41,6 +41,27 @@ async function getDb() {
             )
         `);
 
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS members (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                attendance_score INT DEFAULT 100,
+                behavior_score INT DEFAULT 100,
+                is_active BOOLEAN DEFAULT TRUE,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS rosters (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                week_start DATE NOT NULL,
+                schedule_data JSON NOT NULL,
+                created_by INT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+
         // Seed default Admin if not exists
         const adminEmail = 'admin@mistara.id';
         const [rows] = await pool.query('SELECT * FROM users WHERE email = ?', [adminEmail]);

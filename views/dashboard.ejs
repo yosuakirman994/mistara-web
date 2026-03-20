@@ -18,6 +18,9 @@
                 <% if(user.role === 'Admin') { %>
                 <li><a href="/users" style="display: block; padding: 0.8rem 1rem; color: var(--text-muted); border-radius: 8px;"><i class="fa-solid fa-users" style="width: 20px;"></i> Kelola Anggota</a></li>
                 <% } %>
+                <% if(user.role === 'Admin' || user.role === 'Pengurus') { %>
+                <li><a href="/roster" style="display: block; padding: 0.8rem 1rem; color: var(--text-muted); border-radius: 8px;"><i class="fa-solid fa-wand-magic-sparkles" style="width: 20px;"></i> Kelola Jadwal Misa</a></li>
+                <% } %>
                 <li style="margin-top: 1rem;"><a href="/logout" style="display: block; padding: 0.8rem 1rem; color: #DC2626; border-radius: 8px;"><i class="fa-solid fa-arrow-right-from-bracket" style="width: 20px;"></i> Keluar</a></li>
             </ul>
         </aside>

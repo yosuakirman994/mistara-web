@@ -1,0 +1,156 @@
+<%- include('layout/header') %>
+<main class="page-container" style="padding: 6rem 5%; max-width: 1200px; margin: 0 auto; min-height: 70vh;">
+    <!-- Bagian Judul -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;">
+        <h1 class="section-title" style="margin-bottom: 0;">Sistem Jadwal Pelayanan Misa</h1>
+        <button onclick="document.getElementById('addMemberModal').style.display='flex'" class="btn-primary" style="padding: 0.8rem 1.5rem;">
+            <i class="fa-solid fa-user-plus"></i> Rekrut Anggota
+        </button>
+    </div>
+
+    <!-- Papan Tombol Generate -->
+     <div class="glass-card" style="text-align: center; padding: 3rem 1.5rem; margin-bottom: 3rem; background: linear-gradient(135deg, rgba(139,90,43,0.05) 0%, rgba(255,255,255,0.9) 100%); border: 2px dashed rgba(139,90,43,0.2);">
+        <h2 style="color: var(--primary); margin-bottom: 1rem; font-size: 2rem;"><i class="fa-solid fa-wand-magic-sparkles" style="color: var(--accent);"></i> Generate Jadwal Otomatis</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+            Sistem cerdas ini akan meracik jadwal pelayanan untuk 4 Misa otomatis. <br>
+            Anak dengan nilai rata-rata di bawah standar (< 50) akan diistirahatkan sementara. <br>
+            Anak bintang (rata-rata >= 85) berpeluang mendapat jadwal prioritas.
+        </p>
+        <form action="/roster/generate" method="POST" style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+            <div>
+                <label style="display: block; font-size: 0.85rem; font-weight: bold; color: var(--primary); margin-bottom: 0.5rem; text-align: left;">Tanggal Sabtu Pekan Ini:</label>
+                <input type="date" name="week_date" required style="padding: 0.8rem; border-radius: 8px; border: 1px solid var(--border); font-family: 'Outfit'; min-width: 200px;">
+            </div>
+            <div style="display: flex; align-items: flex-end;">
+                <button type="submit" class="btn-primary" style="padding: 0.8rem 2rem; font-size: 1.1rem; box-shadow: 0 8px 20px rgba(139, 90, 43, 0.2);" onclick="return confirm('Apakah poin absensi dan sikap anggota di tabel bawah sudah mutakhir? Klik OK jika sudah yakin!');">
+                    <i class="fa-solid fa-gears"></i> Racik Jadwal Sekarang
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Grid Layout 2 Kolom (1 Kolom di HP) -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem;">
+        
+        <!-- Kolom Data Anggota -->
+        <div class="glass-card" style="padding: 1.5rem; max-height: 800px; overflow-y: auto; position: relative;">
+            <div style="position: sticky; top: 0; background: rgba(255,255,255,0.95); padding-bottom: 1rem; z-index: 10; backdrop-filter: blur(5px);">
+                <h3 style="color: var(--primary); margin-bottom: 0;"><i class="fa-solid fa-users-viewfinder"></i> Manajemen Poin Anggota</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.2rem;">Setiap perubahan wajib disave per baris (<i class="fa-solid fa-save"></i>).</p>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; min-width: 350px;">
+                    <thead>
+                        <tr style="border-bottom: 2px solid var(--primary); color: var(--primary);">
+                            <th style="padding: 0.8rem;">Nama</th>
+                            <th style="padding: 0.8rem;">Skor Absen & Sikap</th>
+                            <th style="padding: 0.8rem;">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if(members && members.length > 0) { %>
+                            <% members.forEach(m => { %>
+                            <tr style="border-bottom: 1px solid var(--border); background: <%= m.is_active ? 'transparent' : '#fef2f2' %>;">
+                                <form action="/roster/members/update/<%= m.id %>" method="POST">
+                                <td style="padding: 0.8rem; font-weight: 600; color: <%= m.is_active ? 'var(--text-dark)' : '#9ca3af' %>;">
+                                    <%= m.name %>
+                                    <% if(!m.is_active) { %><div style="font-size: 0.7rem; color: red; font-weight: normal;">(Cuti/Nonaktif)</div><% } %>
+                                </td>
+                                <td style="padding: 0.8rem;">
+                                    <div style="display: flex; gap: 5px; align-items: center; margin-bottom: 5px;">
+                                        <input type="number" name="attendance_score" value="<%= m.attendance_score %>" min="0" max="100" style="width: 50px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; text-align: center;"> / 
+                                        <input type="number" name="behavior_score" value="<%= m.behavior_score %>" min="0" max="100" style="width: 50px; padding: 4px; border: 1px solid #ccc; border-radius: 4px; text-align: center;">
+                                    </div>
+                                    <label style="display: flex; align-items: center; gap: 4px; font-size: 0.8rem; color: var(--text-muted); cursor: pointer;">
+                                        <input type="checkbox" name="is_active" <%= m.is_active ? 'checked' : '' %>> Akun Aktif
+                                    </label>
+                                </td>
+                                <td style="padding: 0.8rem;">
+                                    <div style="display: flex; gap: 0.5rem; justify-content: flex-start;">
+                                        <button type="submit" title="Simpan Update" style="background: var(--accent); color: white; border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fa-solid fa-save"></i></button>
+                                </form>
+                                    <form action="/roster/members/delete/<%= m.id %>" method="POST" style="margin: 0;" onsubmit="return confirm('Hapus permanen <%= m.name %> dari sistem?');">
+                                        <button type="submit" title="Hapus Anggota" style="background: #dc2626; color: white; border: none; width: 30px; height: 30px; border-radius: 6px; cursor: pointer; transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'"><i class="fa-solid fa-trash"></i></button>
+                                    </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr><td colspan="3" style="text-align: center; padding: 2rem; color: var(--text-muted); font-style: italic;">Belum ada satupun data anggota anak misdinar di sistem. Tambahkan dulu lewat tombol "Rekrut Anggota" di atas.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Kolom Riwayat Jadwal -->
+        <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+            <h3 style="color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-clock-rotate-left"></i> Hasil Jadwal Ter-Generate</h3>
+            
+            <% if(rosters && rosters.length > 0) { %>
+                <% rosters.forEach(r => { %>
+                <div class="glass-card" style="padding: 1.5rem; position: relative; border-left: 4px solid var(--accent);">
+                    <form action="/roster/delete/<%= r.id %>" method="POST" style="position: absolute; top: 1.5rem; right: 1.5rem;" onsubmit="return confirm('Yakih hapus histori jadwal ini? Anda tidak bisa mengembalikannya lagi.');">
+                        <button type="submit" style="background: rgba(220,38,38,0.1); border: 1px solid rgba(220,38,38,0.3); color: #dc2626; cursor: pointer; height: 30px; width: 30px; border-radius: 5px; transition: background 0.2s;" onmouseover="this.style.background='rgba(220,38,38,0.2)'" onmouseout="this.style.background='rgba(220,38,38,0.1)'" title="Hapus Jadwal"><i class="fa-solid fa-trash"></i></button>
+                    </form>
+                    <h4 style="color: var(--primary); border-bottom: 1px solid var(--border); padding-bottom: 0.8rem; margin-bottom: 1rem; font-size: 1.1rem; padding-right: 40px;">
+                        Mulai: <%= new Date(r.week_start).toLocaleDateString('id-ID', { weekday: 'short', year: 'numeric', month: 'long', day: 'numeric' }) %>
+                    </h4>
+                    
+                    <% 
+                        let shifts = [];
+                        try {
+                            shifts = JSON.parse(r.schedule_data);
+                        } catch(e) {}
+                    %>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem;">
+                        <% shifts.forEach(shift => { %>
+                            <div style="background: rgba(255,255,255,0.6); padding: 1rem; border-radius: 8px; border: 1px solid var(--border);">
+                                <strong style="display: block; margin-bottom: 0.8rem; color: var(--accent); font-size: 0.9rem;"><i class="fa-solid fa-church" style="margin-right: 5px;"></i> <%= shift.name %></strong>
+                                <ul style="list-style-type: decimal; padding-left: 1rem; font-size: 0.85rem; color: var(--text-dark); margin: 0; line-height: 1.5;">
+                                    <% shift.kids.forEach(kid => { %>
+                                        <li style="margin-bottom: 4px; font-weight: 600;"><%= kid %></li>
+                                    <% }) %>
+                                    <% if(!shift.kids || shift.kids.length === 0) { %>
+                                        <li style="color: #dc2626; list-style: none;"><i class="fa-solid fa-triangle-exclamation"></i> Kekurangan anak</li>
+                                    <% } %>
+                                </ul>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+                <% }) %>
+            <% } else { %>
+                <div class="glass-card" style="padding: 3rem; text-align: center; color: var(--text-muted); border: 2px dashed var(--border);">
+                    <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: rgba(0,0,0,0.1); margin-bottom: 1rem; display: block;"></i>
+                    Belum ada riwayat jadwal apapun.<br>Cobalah racik jadwal pertama Anda.
+                </div>
+            <% } %>
+        </div>
+
+    </div>
+
+    <!-- Modal Tambah Anggota Misdinar -->
+    <div id="addMemberModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; padding: 1rem;">
+        <div class="glass-card" style="background: white; padding: 2rem; border-radius: 12px; width: 100%; max-width: 400px; box-shadow: 0 10px 25px rgba(0,0,0,0.2);">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h3 style="color: var(--primary); margin: 0;">Rekrut Anak Baru</h3>
+                <button onclick="document.getElementById('addMemberModal').style.display='none'" style="background: #f3f4f6; border: none; width: 30px; height: 30px; border-radius: 50%; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); display: flex; align-items: center; justify-content: center;">&times;</button>
+            </div>
+            
+            <form action="/roster/members/add" method="POST" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.5rem; color: var(--text-dark);">Nama Panggilan / Singkat</label>
+                    <input type="text" name="name" required placeholder="Cth: Yoseph" style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: 8px; font-family: 'Outfit';">
+                </div>
+                <div style="background: rgba(139,90,43,0.1); padding: 1rem; border-radius: 8px;">
+                    <p style="font-size: 0.8rem; color: var(--primary); margin: 0; line-height: 1.5;"><strong>Catatan Otomatis:</strong> Nilai absensi dan sikap bawaannya di set ke angka sempurana (100). Anda bisa mengubahnya di tabel manajer nanti.</p>
+                </div>
+                <button type="submit" class="btn-primary" style="margin-top: 0.5rem; padding: 1rem; font-weight: bold;"><i class="fa-solid fa-save"></i> Simpan Data Anak</button>
+            </form>
+        </div>
+    </div>
+</main>
+<%- include('layout/footer') %>
