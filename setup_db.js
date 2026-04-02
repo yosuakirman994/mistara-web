@@ -50,7 +50,7 @@ async function setup() {
             // but in real app we'd use bcrypt.
             await connection.query(
                 `INSERT INTO users (email, password, name, role) VALUES (?, ?, ?, ?)`,
-                [adminEmail, 'MistaraAdmin2026', 'Ketua Misdinar', 'Admin']
+                [adminEmail, 'MistaraAdmin2026', 'Koordinator Misdinar', 'Admin']
             );
             console.log(`Admin seeded: ${adminEmail} / MistaraAdmin2026`);
         } else {
