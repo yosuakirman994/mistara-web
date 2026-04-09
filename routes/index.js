@@ -40,7 +40,12 @@ router.get('/schedule', async (req, res) => {
 router.post('/schedule/add', requireAuth, async (req, res) => {
      try {
           const db = await getDb();
-          const { title, date, time, color } = req.body;
+          let { title, date, time, color } = req.body;
+          if (time) {
+               time = time.replace(/\./g, ':');
+               const match = time.match(/(\d{1,2}:\d{2})/);
+               if (match) time = match[1].padStart(5, '0');
+          }
           await db.query(
                "INSERT INTO schedules (title, date, time, color) VALUES (?, ?, ?, ?)",
                [title, date, time, color || '#8B5A2B']
@@ -56,7 +61,12 @@ router.post('/schedule/add', requireAuth, async (req, res) => {
 router.post('/schedule/edit/:id', requireAuth, async (req, res) => {
      try {
           const db = await getDb();
-          const { title, date, time, color } = req.body;
+          let { title, date, time, color } = req.body;
+          if (time) {
+               time = time.replace(/\./g, ':');
+               const match = time.match(/(\d{1,2}:\d{2})/);
+               if (match) time = match[1].padStart(5, '0');
+          }
           await db.query(
                "UPDATE schedules SET title = ?, date = ?, time = ?, color = ? WHERE id = ?",
                [title, date, time, color || '#8B5A2B', req.params.id]
