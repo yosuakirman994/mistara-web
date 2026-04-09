@@ -26,7 +26,12 @@
                         </div>
                         <div class="schedule-details">
                             <h4><%= item.title %></h4>
-                            <p><i class="fa-regular fa-clock"></i> <%= item.time %></p>
+                            <% 
+                               let homeDisplayTime = item.time || '';
+                               const hMatch = homeDisplayTime.match(/(\d{1,2}:\d{2})/);
+                               if (hMatch) homeDisplayTime = hMatch[1].padStart(5, '0');
+                            %>
+                            <p><i class="fa-regular fa-clock"></i> <%= homeDisplayTime %> WIB</p>
                         </div>
                     </div>
                 <% }) %>
